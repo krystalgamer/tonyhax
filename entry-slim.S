@@ -12,16 +12,6 @@ __start:
 	# Restore stack pointer
 	li $sp, 0x801FFF00
 
-#ifdef MCINIT
-
-	# Disable interrupts
-	mfc0 $t0, $12
-	li $t1, 0xFFFFFBFE
-	and $t0, $t1
-	mtc0 $t0, $12
-
-#endif
-
 	# Call ourselves to get the current program counter in $ra
 	bal realstart
 
@@ -31,30 +21,6 @@ realstart:
 
 	# Load A table address
 	li $s0, 0xA0
-
-#ifdef MCINIT
-
-	# Paint purple
-	li $a0, 0xFF00FF
-	bal paintscr
-
-	# Load B table address
-	li $s3, 0xB0
-
-	# Call InitCard(0)
-	li $t1, 0x4A
-	li $a0, 0
-	jalr $s3
-
-	# Call StartCard
-	li $t1, 0x4B
-	jalr $s3
-
-	# Call _bu_init
-	li $t1, 0x55
-	jalr $s0
-
-#endif
 
 	# Paint blue
 	li $a0, 0xFF0000
